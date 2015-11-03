@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head lang="ja">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% extend "base.html" %}
 
-{{ hour}}時です<br>
+{% block body %}
+{ {hour}}時です<br>
 {{message}}
-</body>
-</html>
+{% endblock %}

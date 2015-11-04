@@ -43,3 +43,9 @@ def hello_forms(request):
         'message': message,
     }
     return render(request, 'forms.html', d)
+
+def hello_forms2(request):
+    d = {
+        'form': forms.SampleForm(),
+    }
+    return render(request, 'form_samples.html', d)

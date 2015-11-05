@@ -2,6 +2,8 @@ from datetime import datetime
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from . import forms
+from django.shortcuts import redirect
+from . import forms, models
 
 def hello_world(request):
     return HttpResponse('Hello World')
@@ -49,3 +51,15 @@ def hello_forms2(request):
         'form': forms.SampleForm(),
     }
     return render(request, 'form_samples.html', d)
+
+def hello_models(request):
+    form = forms.HelloForm(request.POST or None)
+    if form.is_valid():
+        models.Hello.objects.create(**form.cleaned_data)
+        return redirect('hello:hello_models')
+
+    d = {
+        'form': form,
+        'hello_qs': models.Hello.objects.all().order_by('-id')
+    }
+    return render(request, 'models.html', d)

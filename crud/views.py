@@ -1,5 +1,8 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404,
+)
 from django.http import HttpResponse
 from .models import Message
 from .forms import MessageForm
@@ -34,4 +37,21 @@ def add(request):
     d = {
         'form': form,
     }
+    return render(request, 'crud/edit.html', d)
+
+def edit(request, editing_id):
+    message = get_object_or_404(Message, id=editing_id)
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message.message = form.cleaned_data['message']
+            message.save()
+            return redirect('crud:index')
+    else:
+        # GETリクエスト（初期表示）時はDBに保存されているデータをFormに結びつける
+        form = MessageForm({'message': message.message})
+    d = {
+        'form': form,
+    }
+
     return render(request, 'crud/edit.html', d)

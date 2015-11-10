@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponse
 from .models import Message
+from .forms import MessageForm
+
 
 def index(request):
     return render(request,'crud/index.html', {})
@@ -21,3 +24,14 @@ def index(request):
         'messages': Message.objects.all(),
     }
     return render(request, 'crud/index.html', d)
+
+def add(request):
+    form = MessageForm(request.POST or None)
+    if form.is_valid():
+        Message.objects.create(**form.cleaned_data)
+        return redirect('crud:index')
+
+    d = {
+        'form': form,
+    }
+    return render(request, 'crud/edit.html', d)

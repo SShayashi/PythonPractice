@@ -20,7 +20,10 @@ def edit(request, editing_id):
 
 
 def delete(request):
-    return HttpResponse('Delete')
+    delete_ids = request.POST.getlist('delete_ids')
+    if delete_ids:
+        Message.objects.filter(id__in=delete_ids).delete()
+        return redirect('crud:index')
 
 def index(request):
     d = {
